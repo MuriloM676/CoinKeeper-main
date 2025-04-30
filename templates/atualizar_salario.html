@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Atualizar Salário{% endblock %}
+
+{% block content %}
+<div class="card animated" style="max-width: 500px; margin: 50px auto;">
+    <div class="card-body">
+        <h2 class="card-title"><i class="fas fa-money-bill-wave"></i> Atualizar Salário</h2>
+        <form method="POST" action="{{ url_for('atualizar_salario') }}">
+            <div class="form-group">
+                <label for="salario" class="form-label">Novo Salário Mensal</label>
+                <input type="number" step="0.01" class="form-control" id="salario" name="salario" value="{{ salario_atual }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-check"></i> Atualizar Salário
+            </button>
+            <a href="{{ url_for('painel') }}" class="btn btn-block mt-2" style="background-color: #444; color: white;">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

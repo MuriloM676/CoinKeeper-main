@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Painel de Controle{% endblock %}
+
+{% block content %}
+<div class="animated">
+    <h1 class="card-title"><i class="fas fa-tachometer-alt"></i> Painel de Controle</h1>
+    <p class="mb-4">Bem-vindo, {{ nome }}! Aqui está o resumo dos seus gastos.</p>
+
+    <!-- Alerta para Saldo Abaixo de 500 -->
+    {% if saldo_atual < 500 %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Atenção!</strong> Seu saldo está abaixo de R$ 500. Aqui estão algumas dicas para ajudar a cortar os gastos e aumentar sua economia:
+        <ul>
+            <li>Reveja seus gastos com lazer e entretenimento.</li>
+            <li>Tente reduzir o consumo de alimentos fora de casa.</li>
+            <li>Considere substituir produtos caros por alternativas mais econômicas.</li>
+            <li>Avaliando assinaturas e planos recorrentes, verifique se todos são necessários.</li>
+            <li>Estabeleça um limite mensal para compras não essenciais.</li>
+            <li>Considere buscar fontes alternativas de renda, como trabalhos freelancers ou vendas de itens que não usa mais.</li>
+        </ul>
+        {% if salario >= 3000 %}
+            <div class="alert alert-info mt-3" role="alert">
+                <strong>Dica extra:</strong> Com seu salário atual, você pode conseguir economizar uma quantia significativa se começar a controlar os gastos e investir em uma reserva de emergência. Tente cortar 10% do seu salário todo mês e guarde para o futuro.
+            </div>
+        {% elif salario >= 1500 %}
+            <div class="alert alert-info mt-3" role="alert">
+                <strong>Dica extra:</strong> Tente economizar pelo menos 5% do seu salário para começar a construir uma reserva de emergência. Você pode alcançar isso reduzindo gastos com alimentação fora e lazer.
+            </div>
+        {% else %}
+            <div class="alert alert-info mt-3" role="alert">
+                <strong>Dica extra:</strong> Mesmo com um salário menor, é possível começar a economizar. Focar em reduzir gastos não essenciais e poupar pequenos valores mensalmente pode te ajudar a melhorar sua situação financeira ao longo do tempo.
+            </div>
+        {% endif %}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endif %}
+
+    <div class="dashboard-grid">
+        <div class="card summary-card">
+            <i class="fas fa-money-bill-wave" style="font-size: 24px; color: var(--primary-light);"></i>
+            <div class="summary-value income">R$ {{ "%.2f"|format(salario) }}</div>
+            <div class="summary-label">Salário Mensal</div>
+        </div>
+
+        <div class="card summary-card">
+            <i class="fas fa-hand-holding-usd" style="font-size: 24px; color: var(--primary-light);"></i>
+            <div class="summary-value expense">R$ {{ "%.2f"|format(total_gastos) }}</div>
+            <div class="summary-label">Total Gastos</div>
+        </div>
+
+        <div class="card summary-card">
+            <i class="fas fa-piggy-bank" style="font-size: 24px; color: var(--primary-light);"></i>
+            <div class="summary-value balance">R$ {{ "%.2f"|format(saldo_atual) }}</div>
+            <div class="summary-label">Saldo Atual</div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <h2 class="card-title"><i class="fas fa-chart-pie"></i> Distribuição de Gastos</h2>
+        {% if grafico %}
+        <div class="chart-container" style="max-width: 400px; margin: 0 auto;">
+            <img src="data:image/png;base64,{{ grafico }}" alt="Gráfico de Gastos" style="width: 100%;">
+        </div>
+        {% else %}
+        <p>Nenhum gasto registrado ainda.</p>
+        {% endif %}
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="card-title"><i class="fas fa-history"></i> Últimos Gastos</h2>
+            
+            <a href="{{ url_for('adicionar_gasto') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Adicionar Gasto
+            </a>
+        </div>
+        <div class="card-body">
+            {% if ultimos %}
+            <ul class="transaction-list">
+                {% for gasto in ultimos %}
+                <li class="transaction-item">
+                    <div>
+                        <strong>{{ gasto['categoria'] }}</strong>
+                        <small class="text-muted">{{ gasto['data'] }}</small>
+                        {% if gasto['descricao'] %}<p>{{ gasto['descricao'] }}</p>{% endif %}
+                    </div>
+                    <div class="transaction-amount {{ 'necessary' if gasto['tipo'] == 'necessario' else 'unnecessary' }}">
+                        R$ {{ "%.2f"|format(gasto['valor']) }}
+                    </div>
+                    <!-- Link para remover o gasto -->
+                    <a href="{{ url_for('remover_gasto', id=gasto['id']) }}" class="btn btn-danger ml-2">
+                        <i class="fas fa-trash-alt"></i> Remover
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Nenhum gasto registrado ainda.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

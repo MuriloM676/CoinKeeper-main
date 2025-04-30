@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-trash-alt"></i> Remover Gasto</h3>
+        </div>
+        <div class="card-body">
+            <p>Você tem certeza de que deseja remover o gasto abaixo?</p>
+            <div class="mb-3">
+                <strong>Categorias:</strong> {{ gasto['categoria'] }}<br>
+                <strong>Valor:</strong> R$ {{ "%.2f"|format(gasto['valor']) }}<br>
+                <strong>Descrição:</strong> {{ gasto['descricao'] if gasto['descricao'] else 'Não há descrição.' }}
+            </div>
+            <form method="POST">
+                <button type="submit" class="btn btn-danger">Sim, remover</button>
+                <a href="{{ url_for('painel') }}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

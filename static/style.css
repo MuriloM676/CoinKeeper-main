@@ -1,0 +1,243 @@
+:root {
+    --primary-color: #6a1b9a;
+    --primary-dark: #4a148c;
+    --primary-light: #9c27b0;
+    --secondary-color: #1a1a1a;
+    --text-light: #f5f5f5;
+    --text-dark: #212121;
+    --success-color: #4caf50;
+    --error-color: #f44336;
+    --warning-color: #ff9800;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: all 0.3s ease;
+}
+
+body {
+    background-color: var(--secondary-color);
+    color: var(--text-light);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styles */
+.header {
+    background-color: var(--primary-dark);
+    padding: 15px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.nav-link:hover {
+    background-color: var(--primary-light);
+}
+
+/* Card Styles */
+.card {
+    background-color: #2d2d2d;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(106, 27, 154, 0.3);
+}
+
+.card-title {
+    color: var(--primary-light);
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-light);
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #333;
+    color: white;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 2px rgba(156, 39, 176, 0.3);
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-light);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* Dashboard Styles */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.summary-card {
+    text-align: center;
+    padding: 25px;
+}
+
+.summary-value {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.summary-label {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.income {
+    color: #4caf50;
+}
+
+.expense {
+    color: #f44336;
+}
+
+.balance {
+    color: var(--primary-light);
+}
+
+/* Chart Container */
+.chart-container {
+    background-color: #2d2d2d;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Transactions List */
+.transaction-list {
+    list-style: none;
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #444;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-amount {
+    font-weight: bold;
+}
+
+.necessary {
+    color: #4caf50;
+}
+
+.unnecessary {
+    color: #f44336;
+}
+.btn-salario {
+    display: inline-block;
+    background-color: #7c3aed; /* Roxo tailwind */
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.btn-salario:hover {
+    background-color: #5b21b6; /* Roxo mais escuro */
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animated {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
