@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Gráfico de Gastos Mensais</h2>
+
+<div class="chart-container">
+    {% if grafico_mensal %}
+        <div class="chart">
+            <img src="data:image/png;base64,{{ grafico_mensal }}" alt="Gráfico de Gastos Mensais" class="grafico-img">
+            <p><strong>Mês com maior gasto:</strong> {{ mes_mais_caro }}</p>
+        </div>
+    {% else %}
+        <p class="no-data">Não há dados suficientes para gerar um gráfico.</p>
+    {% endif %}
+</div>
+
+<a href="{{ url_for('painel') }}" class="btn btn-primary">Voltar para o Painel</a>
+
+{% endblock %}

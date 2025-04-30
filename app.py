@@ -18,6 +18,42 @@ def get_db():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     return conn
+def gerar_grafico_gastos_mensais(usuario_id):
+    db = get_db()
+    dados = db.execute('''
+        SELECT 
+            strftime('%Y-%m', data) AS mes,
+            SUM(valor) as total
+        FROM gastos
+        WHERE usuario_id = ?
+        GROUP BY mes
+        ORDER BY mes
+    ''', (usuario_id,)).fetchall()
+
+    if not dados:
+        return None, None
+
+    meses = [d['mes'] for d in dados]
+    valores = [d['total'] for d in dados]
+    mes_mais_caro = meses[valores.index(max(valores))]
+
+    # Gerar o gráfico
+    plt.figure(figsize=(10, 5))
+    barras = plt.bar(meses, valores, color='#9c27b0')
+    plt.title('Gastos Mensais')
+    plt.xlabel('Mês')
+    plt.ylabel('Total Gasto')
+
+    for i, v in enumerate(valores):
+        plt.text(i, v + 0.5, f'R${v:.2f}', ha='center', fontsize=10)
+
+    img = io.BytesIO()
+    plt.tight_layout()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plt.close()
+
+    return base64.b64encode(img.getvalue()).decode('utf-8'), mes_mais_caro
 
 def init_db():
     with get_db() as db:
@@ -170,8 +206,9 @@ def painel():
         ORDER BY data DESC LIMIT 5
     ''', (usuario_id,)).fetchall()
 
-    # Generate chart if there are expenses
+    # Generate charts
     grafico = generate_animated_chart(gastos) if gastos else None
+    grafico_mensal, mes_mais_caro = gerar_grafico_gastos_mensais(usuario_id)
 
     return render_template(
         'painel.html',
@@ -181,7 +218,9 @@ def painel():
         total_gastos=total_gastos,
         saldo_atual=saldo_atual,
         ultimos=ultimos,
-        grafico=grafico
+        grafico=grafico,
+        grafico_mensal=grafico_mensal,
+        mes_mais_caro=mes_mais_caro
     )
 
 @app.route('/adicionar-gasto', methods=['GET', 'POST'])
@@ -219,6 +258,20 @@ def adicionar_gasto():
     return render_template('adicionar_gasto.html', categorias=categorias)
 
 # Rota para confirmar a remoção de um gasto
+@app.route('/grafic')
+def grafic():
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    usuario_id = session['usuario_id']
+    grafico_mensal, mes_mais_caro = gerar_grafico_gastos_mensais(usuario_id)
+
+    if not grafico_mensal:
+        flash('Não há dados suficientes para gerar o gráfico', 'error')
+        return redirect(url_for('painel'))
+
+    return render_template('grafic.html', grafico_mensal=grafico_mensal, mes_mais_caro=mes_mais_caro)
+
 @app.route('/remover-gasto/<int:id>', methods=['GET', 'POST'])
 def remover_gasto(id):
     if 'usuario_id' not in session:
