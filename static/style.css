@@ -257,6 +257,7 @@ body {
     animation: fadeIn 0.5s ease-out;
 }
 
+
 /* Responsividade */
 @media (max-width: 768px) {
     .dashboard-grid {
